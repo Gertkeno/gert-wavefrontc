@@ -18,9 +18,7 @@ struct Normal
 
 struct Face
 {
-	unsigned int v1, t1, n1;
-	unsigned int v2, t2, n2;
-	unsigned int v3, t3, n3;
+	unsigned int v[3], t[3], n[3];
 };
 
 #endif //TYPES_H

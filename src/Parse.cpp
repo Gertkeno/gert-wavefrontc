@@ -25,14 +25,17 @@ bool parse_file( std::ifstream& filedata, std::vector<Vertex>& vert, std::vector
 		else if( header.compare( "vt" )  ==  0 )
 		{
 			//parse texture
+			text.push_back( parse_texture( activeLine ) );
 		}
 		else if( header.compare( "vn" ) == 0 )
 		{
 			//parse normal
+			norm.push_back( parse_normal( activeLine ) );
 		}
 		else if( header.compare( "f" ) == 0 )
 		{
 			//parse face
+			face.push_back( parse_face( activeLine ) );
 		}
 		else
 		{
