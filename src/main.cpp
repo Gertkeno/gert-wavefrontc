@@ -20,7 +20,13 @@ int main( int argc, char ** argv )
 		{
 			if( std::strcmp( "-help", argv[i] ) == 0 )
 			{
-				std::cout << "no help yet\n";
+				std::cout << R"(HOW TO EXECUTE:
+gert-wavefrontc [options] FILENAME
+	you can use multiple files as input if space seperated
+
+OPTIONS:
+	-help	displays this text
+)" << std::endl;
 			}
 			continue;
 		}

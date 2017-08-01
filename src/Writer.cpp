@@ -49,7 +49,7 @@ bool write_file( std::ofstream& file, const std::string& prefix, const std::vect
 	}
 	file << "};\n";
 	//face
-	file << "const unsigned int " << prefix << "_norm[] = {";
+	file << "const unsigned int " << prefix << "_face[] = {";
 	for( auto i = 0u; i < f.size(); ++i )
 	{
 		file << "\n";
@@ -61,7 +61,7 @@ bool write_file( std::ofstream& file, const std::string& prefix, const std::vect
 		}
 	}
 	file << "};\n";
-	//total vertex count
+	//total vertex count, based on faces
 	file << "const unsigned int " << prefix << "_len = " << f.size()*3 << ";\n";
 	return true;
 }
