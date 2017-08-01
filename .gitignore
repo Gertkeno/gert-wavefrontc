@@ -2,3 +2,4 @@
 test*
 build/*.o
 wavefront_toc
+gert-wavefrontc

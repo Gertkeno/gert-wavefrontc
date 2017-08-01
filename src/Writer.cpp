@@ -2,11 +2,14 @@
 #include <fstream>
 #include <vector>
 #include <types.h>
+#include <Version.h>
 
 constexpr int LINE_BREAK_RATE = 3;
 
 bool write_file( std::ofstream& file, const std::string& prefix, const std::vector<Vertex>& v, const std::vector<Texture>& t, const std::vector<Normal>& n, const std::vector<Face>& f )
 {
+	//version control
+	file << "//made with gert-wavefrontc #" << version::str << "\n";
 	//start vertex writing
 	file << "const float " << prefix << "_vert[] = {";
 	for( auto i = 0u; i < v.size(); ++i )
@@ -58,7 +61,7 @@ bool write_file( std::ofstream& file, const std::string& prefix, const std::vect
 		}
 	}
 	file << "};\n";
+	//total vertex count
 	file << "const unsigned int " << prefix << "_len = " << f.size()*3 << ";\n";
-	//std::cout << f.size() << std::endl;
 	return true;
 }
