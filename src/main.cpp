@@ -2,6 +2,7 @@
 #include <fstream>
 #include <cstring>
 #include <vector>
+#include <Version.h>
 #include <types.h>
 
 bool parse_file( std::ifstream& filedata, std::vector<Vertex>& vert, std::vector<Texture>& text, std::vector<Normal>& norm, std::vector<Face>& face );
@@ -25,8 +26,13 @@ gert-wavefrontc [options] FILENAME
 	you can use multiple files as input if space seperated
 
 OPTIONS:
-	-help	displays this text
+	-help			displays this text
+	-v[ersion]      displays the version number
 )" << std::endl;
+			}
+			else if( std::strcmp( "-v", argv[i] ) == 0 or std::strcmp( "-version", argv[i] ) == 0 )
+			{
+				std::cout << "gert-wavefrontc version #" << version::str << std::endl;
 			}
 			continue;
 		}
