@@ -58,12 +58,20 @@ OPTIONS:
 		std::ofstream outFile;
 		{//get outfilename
 			std::string outname( argv[i] );
+			size_t slashfind = outname.rfind( '/' );
+			if( slashfind == std::string::npos ) slashfind = 0;
+			else ++slashfind;
+			outname = outname.substr( slashfind );
 			outname = outname.substr( 0, outname.rfind( '.' ) );
 			outname.append( ".c" );
 			std::cout << "--Output file: " << outname << std::endl;
 			outFile.open( outname.c_str() );
 		}
 		std::string prefix( argv[i] );
+		size_t slashfind = prefix.rfind( '/' );
+		if( slashfind == std::string::npos ) slashfind = 0;
+		else ++slashfind;
+		prefix = prefix.substr( slashfind );
 		prefix = prefix.substr( 0, prefix.find( '.' ) );
 		if( not outFile.is_open() )
 		{
