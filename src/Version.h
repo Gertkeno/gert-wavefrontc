@@ -1,4 +1,4 @@
 namespace version
 {
-	constexpr char str[] = "0.1.2";
+	constexpr char str[] = "0.1.3";
 }

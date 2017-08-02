@@ -51,11 +51,12 @@ Face parse_face( const std::string& line )
 
 	for( auto i = 0u; i < 3u; ++i )
 	{
-		out.v[i] = std::stol( line.substr( marks[i], std::string::npos ) );
+		//-1 to re-align since wavefront array starts at 1
+		out.v[i] = std::stol( line.substr( marks[i], std::string::npos ) )-1;
 		marks[i] = line.find( '/', marks[i] ) + 1;
-		out.t[i] = std::stol( line.substr( marks[i], std::string::npos ) );
+		out.t[i] = std::stol( line.substr( marks[i], std::string::npos ) )-1;
 		marks[i] = line.find( '/', marks[i] ) + 1;
-		out.n[i] = std::stol( line.substr( marks[i], std::string::npos ) );
+		out.n[i] = std::stol( line.substr( marks[i], std::string::npos ) )-1;
 		//std::cout << "got face " << out.v[i] << "/" << out.t[i] << "/" << out.n[i] << std::endl;
 	}
 
