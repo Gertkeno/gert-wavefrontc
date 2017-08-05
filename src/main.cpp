@@ -29,6 +29,7 @@ gert-wavefrontc [options] FILENAME
 OPTIONS:
 	-help			displays this text
 	-v[ersion]      displays the version number
+	-cout           output is using std::cout, can be piped into files
 )" << std::endl;
 			}
 			else if( std::strcmp( "-v", argv[i] ) == 0 or std::strcmp( "-version", argv[i] ) == 0 )
