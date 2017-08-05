@@ -3,7 +3,7 @@
 
 namespace version
 {
-	constexpr char str[] = "0.1.4";
+	constexpr char str[] = "0.2.0";
 }
 
 #endif //VERSION_H
