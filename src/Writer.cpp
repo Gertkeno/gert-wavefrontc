@@ -6,7 +6,7 @@
 
 constexpr int LINE_BREAK_RATE = 3;
 
-bool write_file( std::ofstream& file, const std::string& prefix, const std::vector<Vertex>& v, const std::vector<Texture>& t, const std::vector<Normal>& n, const std::vector<Face>& f )
+bool write_file( std::ostream& file, const std::string& prefix, const std::vector<Vertex>& v, const std::vector<Texture>& t, const std::vector<Normal>& n, const std::vector<Face>& f )
 {
 	//version control
 	file << "//made with gert-wavefrontc #" << version::str << "\n";

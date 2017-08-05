@@ -6,7 +6,7 @@
 #include <types.h>
 
 bool parse_file( std::ifstream& filedata, std::vector<Vertex>& vert, std::vector<Texture>& text, std::vector<Normal>& norm, std::vector<Face>& face );
-bool write_file( std::ofstream& file, const std::string&, const std::vector<Vertex>&, const std::vector<Texture>&, const std::vector<Normal>&, const std::vector<Face>& );
+bool write_file( std::ostream& file, const std::string&, const std::vector<Vertex>&, const std::vector<Texture>&, const std::vector<Normal>&, const std::vector<Face>& );
 
 int main( int argc, char ** argv )
 {
@@ -15,6 +15,7 @@ int main( int argc, char ** argv )
 		std::cout << "No input files, use -help\n";
 		return EXIT_FAILURE;
 	}
+	bool useCout( false );
 	for( int i = 1; i < argc; ++i )
 	{
 		if( argv[i][0] == '-' )
@@ -32,14 +33,18 @@ OPTIONS:
 			}
 			else if( std::strcmp( "-v", argv[i] ) == 0 or std::strcmp( "-version", argv[i] ) == 0 )
 			{
-				std::cout << "gert-wavefrontc version #" << version::str << std::endl;
+				std::cout << "//gert-wavefrontc version #" << version::str << std::endl;
+			}
+			else if( std::strcmp( "-cout", argv[i] ) == 0 )
+			{
+				useCout = true;
 			}
 			continue;
 		}
 		std::ifstream wavefrontFile( argv[i] );
 		if( not wavefrontFile.is_open() )
 		{
-			std::cout << "File " << argv[i] << " couldn't open\n";
+			std::cout << "ERROR: File " << argv[i] << " couldn't open\n";
 			continue;
 		}
 		//data loaded ready to go
@@ -49,7 +54,7 @@ OPTIONS:
 		std::vector<Normal> _norm;
 		std::vector<Face> _face;
 
-		std::cout << "--Starting file " << argv[i] << std::endl;
+		std::cout << "//Using file " << argv[i] << std::endl;
 		if( not parse_file( wavefrontFile, _vert, _text, _norm, _face ) )
 		{
 			std::cout << "ERROR: Couldn't parse file " << argv[i] << " aborting operation\n";
@@ -64,7 +69,7 @@ OPTIONS:
 			outname = outname.substr( slashfind );
 			outname = outname.substr( 0, outname.rfind( '.' ) );
 			outname.append( ".c" );
-			std::cout << "--Output file: " << outname << std::endl;
+			std::cout << "//Output file: " << outname << std::endl;
 			outFile.open( outname.c_str() );
 		}
 		std::string prefix( argv[i] );
@@ -78,7 +83,12 @@ OPTIONS:
 			std::cout << "ERROR: Couldn't open output file\n";
 			continue;
 		}
-		if( not write_file( outFile, prefix, _vert, _text, _norm, _face ) )
+		std::ostream* currentOut = &outFile;
+		if( useCout )
+		{
+			currentOut = &std::cout;
+		}
+		if( not write_file( *currentOut, prefix, _vert, _text, _norm, _face ) )
 		{
 			std::cout << "ERROR: Writing file failed\n";
 			continue;
