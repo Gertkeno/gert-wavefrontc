@@ -12,7 +12,7 @@ int main( int argc, char ** argv )
 {
 	if( argc <= 1 )
 	{
-		std::cout << "No input files, use -help\n";
+		std::cerr << "No input files, use -help\n";
 		return EXIT_FAILURE;
 	}
 	bool useCout( false );
@@ -34,7 +34,7 @@ OPTIONS:
 			}
 			else if( std::strcmp( "-v", argv[i] ) == 0 or std::strcmp( "-version", argv[i] ) == 0 )
 			{
-				std::cout << "//gert-wavefrontc version #" << version::str << std::endl;
+				std::cerr << "gert-wavefrontc version #" << version::str << std::endl;
 			}
 			else if( std::strcmp( "-cout", argv[i] ) == 0 )
 			{
@@ -45,7 +45,7 @@ OPTIONS:
 		std::ifstream wavefrontFile( argv[i] );
 		if( not wavefrontFile.is_open() )
 		{
-			std::cout << "ERROR: File " << argv[i] << " couldn't open\n";
+			std::cerr << "ERROR: File " << argv[i] << " couldn't open\n";
 			continue;
 		}
 		//data loaded ready to go
@@ -58,10 +58,11 @@ OPTIONS:
 		std::cout << "//Using file " << argv[i] << std::endl;
 		if( not parse_file( wavefrontFile, _vert, _text, _norm, _face ) )
 		{
-			std::cout << "ERROR: Couldn't parse file " << argv[i] << " aborting operation\n";
+			std::cerr << "ERROR: Couldn't parse file " << argv[i] << " aborting operation\n";
 		}
 		
 		std::ofstream outFile;
+		if( not useCout )
 		{//get outfilename
 			std::string outname( argv[i] );
 			size_t slashfind = outname.rfind( '/' );
@@ -70,8 +71,13 @@ OPTIONS:
 			outname = outname.substr( slashfind );
 			outname = outname.substr( 0, outname.rfind( '.' ) );
 			outname.append( ".c" );
-			std::cout << "//Output file: " << outname << std::endl;
+			std::cerr << "Output file: " << outname << std::endl;
 			outFile.open( outname.c_str() );
+			if( not outFile.is_open() )
+			{
+				std::cerr << "ERROR: Couldn't open output file " << outname << std::endl;
+				continue;
+			}
 		}
 		std::string prefix( argv[i] );
 		size_t slashfind = prefix.rfind( '/' );
@@ -79,11 +85,6 @@ OPTIONS:
 		else ++slashfind;
 		prefix = prefix.substr( slashfind );
 		prefix = prefix.substr( 0, prefix.find( '.' ) );
-		if( not outFile.is_open() )
-		{
-			std::cout << "ERROR: Couldn't open output file\n";
-			continue;
-		}
 		std::ostream* currentOut = &outFile;
 		if( useCout )
 		{
@@ -91,7 +92,7 @@ OPTIONS:
 		}
 		if( not write_file( *currentOut, prefix, _vert, _text, _norm, _face ) )
 		{
-			std::cout << "ERROR: Writing file failed\n";
+			std::cerr << "ERROR: Writing file failed\n";
 			continue;
 		}
 	}
