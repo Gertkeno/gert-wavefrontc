@@ -27,7 +27,7 @@ gert-wavefrontc [options] FILENAME
 	you can use multiple files as input if space seperated
 
 OPTIONS:
-	-help			displays this text
+	-help           displays this text
 	-v[ersion]      displays the version number
 	-cout           output is using std::cout, can be piped into files
 )" << std::endl;
@@ -39,6 +39,10 @@ OPTIONS:
 			else if( std::strcmp( "-cout", argv[i] ) == 0 )
 			{
 				useCout = true;
+			}
+			else
+			{
+				std::cerr << "Unrecognized argument \"" << argv[i] << "\" use -help\n";
 			}
 			continue;
 		}
