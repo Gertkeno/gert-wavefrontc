@@ -20,23 +20,23 @@ int main( int argc, char ** argv )
 	{
 		if( argv[i][0] == '-' )
 		{
-			if( std::strcmp( "-help", argv[i] ) == 0 )
+			if( std::strcmp( "-h", argv[i] ) == 0 or std::strcmp( "-help", argv[i] ) == 0 )
 			{
 				std::cout << R"(HOW TO EXECUTE:
 gert-wavefrontc [options] FILENAME
 	you can use multiple files as input if space seperated
 
 OPTIONS:
-	-help           displays this text
+	-h[elp]         displays this text
 	-v[ersion]      displays the version number
-	-cout           output is using std::cout, can be piped into files
+	-c[out]         output is using std::cout, can be piped into files
 )" << std::endl;
 			}
 			else if( std::strcmp( "-v", argv[i] ) == 0 or std::strcmp( "-version", argv[i] ) == 0 )
 			{
 				std::cerr << "gert-wavefrontc version #" << version::str << std::endl;
 			}
-			else if( std::strcmp( "-cout", argv[i] ) == 0 )
+			else if( std::strcmp( "-c", argv[i] ) == 0 or std::strcmp( "-cout", argv[i] ) == 0 )
 			{
 				useCout = true;
 			}
