@@ -54,7 +54,15 @@ Face parse_face( const std::string& line )
 		//-1 to re-align since wavefront array starts at 1
 		out.v[i] = std::stol( line.substr( marks[i], std::string::npos ) )-1;
 		marks[i] = line.find( '/', marks[i] ) + 1;
-		out.t[i] = std::stol( line.substr( marks[i], std::string::npos ) )-1;
+		if( line[marks[i]] == '/' )
+		{
+			std::cerr << "ERROR: No texture coordinates found, setting 0\n";
+			out.t[i] = 0;
+		}
+		else
+		{
+			out.t[i] = std::stol( line.substr( marks[i], std::string::npos ) )-1;
+		}
 		marks[i] = line.find( '/', marks[i] ) + 1;
 		out.n[i] = std::stol( line.substr( marks[i], std::string::npos ) )-1;
 		//std::cout << "got face " << out.v[i] << "/" << out.t[i] << "/" << out.n[i] << std::endl;
