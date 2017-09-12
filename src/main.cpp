@@ -18,6 +18,7 @@ int main( int argc, char ** argv )
 		return EXIT_FAILURE;
 	}
 	bool useCout( false );
+	bool writeFaces( false );
 	for( int i = 1; i < argc; ++i )
 	{
 		if( argv[i][0] == '-' )
@@ -32,6 +33,7 @@ OPTIONS:
 	-h[elp]         displays this text
 	-v[ersion]      displays the version number
 	-c[out]         output is using std::cout, can be piped into files
+	-f[aces]        output is blocked into vertex, texture coordinates, normals and faces
 )" << std::endl;
 			}
 			else if( std::strcmp( "-v", argv[i] ) == 0 or std::strcmp( "-version", argv[i] ) == 0 )
@@ -41,6 +43,10 @@ OPTIONS:
 			else if( std::strcmp( "-c", argv[i] ) == 0 or std::strcmp( "-cout", argv[i] ) == 0 )
 			{
 				useCout = true;
+			}
+			else if( std::strcmp( "-f", argv[i] ) == 0 or std::strcmp( "-faces", argv[i] ) == 0 )
+			{
+				writeFaces = true;
 			}
 			else
 			{
@@ -55,7 +61,7 @@ OPTIONS:
 			continue;
 		}
 		//data loaded ready to go
-		
+
 		std::vector<Vertex> _vert;
 		std::vector<Texture> _text;
 		std::vector<Normal> _norm;
@@ -69,7 +75,7 @@ OPTIONS:
 
 		std::vector<float> _raw = expand_faces( _vert, _text, _norm, _face );
 		std::cerr << "[INFO] expanded size | face count: " << _raw.size()/8 << " | " << _face.size()*3 << std::endl;
-		
+
 		std::ofstream outFile;
 		if( not useCout )
 		{//get outfilename
@@ -99,16 +105,16 @@ OPTIONS:
 		{
 			currentOut = &std::cout;
 		}
-		if( not write_file_raw( *currentOut, prefix, _raw ) )
+		if( writeFaces and ( not write_file( *currentOut, prefix, _vert, _text, _norm, _face ) ))
+		{
+			std::cerr << "[ERROR] Writing file failed\n";
+			continue;
+		}
+		else if( not write_file_raw( *currentOut, prefix, _raw ) )
 		{
 			std::cerr << "[ERROR] Writing raw failed\n";
 			continue;
 		}
-		/*if( not write_file( *currentOut, prefix, _vert, _text, _norm, _face ) )
-		{
-			std::cerr << "[ERROR] Writing file failed\n";
-			continue;
-		}*/
 	}
 	return EXIT_SUCCESS;
 }
