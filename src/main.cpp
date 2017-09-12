@@ -105,15 +105,21 @@ OPTIONS:
 		{
 			currentOut = &std::cout;
 		}
-		if( writeFaces and ( not write_file( *currentOut, prefix, _vert, _text, _norm, _face ) ))
+		if( writeFaces )
 		{
-			std::cerr << "[ERROR] Writing file failed\n";
-			continue;
+			if( not write_file( *currentOut, prefix, _vert, _text, _norm, _face ) )
+			{
+				std::cerr << "[ERROR] Writing file failed\n";
+				continue;
+			}
 		}
-		else if( not write_file_raw( *currentOut, prefix, _raw ) )
+		else 
 		{
-			std::cerr << "[ERROR] Writing raw failed\n";
-			continue;
+			if( not write_file_raw( *currentOut, prefix, _raw ) )
+			{
+				std::cerr << "[ERROR] Writing raw failed\n";
+				continue;
+			}
 		}
 	}
 	return EXIT_SUCCESS;
