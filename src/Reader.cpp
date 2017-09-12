@@ -39,7 +39,7 @@ bool parse_file( std::ifstream& filedata, std::vector<Vertex>& vert, std::vector
 		}
 		else
 		{
-			std::cerr << "WARNING: unknown header " << header << std::endl;
+			std::cerr << "[WARNING] unknown header " << header << std::endl;
 		}
 	}
 	//std::cout << "//notice: reached end of file\n";

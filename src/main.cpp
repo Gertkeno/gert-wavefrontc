@@ -7,12 +7,14 @@
 
 bool parse_file( std::ifstream& filedata, std::vector<Vertex>& vert, std::vector<Texture>& text, std::vector<Normal>& norm, std::vector<Face>& face );
 bool write_file( std::ostream& file, const std::string&, const std::vector<Vertex>&, const std::vector<Texture>&, const std::vector<Normal>&, const std::vector<Face>& );
+bool write_file_raw( std::ostream& file, const std::string& prefix, const std::vector<float>& d );
+std::vector<float> expand_faces( const std::vector<Vertex>& v, const std::vector<Texture>& t, const std::vector<Normal>& n, const std::vector<Face>& f );
 
 int main( int argc, char ** argv )
 {
 	if( argc <= 1 )
 	{
-		std::cerr << "No input files, use -help\n";
+		std::cerr << "[ERROR] No input files, use -help\n";
 		return EXIT_FAILURE;
 	}
 	bool useCout( false );
@@ -34,7 +36,7 @@ OPTIONS:
 			}
 			else if( std::strcmp( "-v", argv[i] ) == 0 or std::strcmp( "-version", argv[i] ) == 0 )
 			{
-				std::cerr << "gert-wavefrontc version #" << version::str << std::endl;
+				std::cerr << "[INFO] gert-wavefrontc version #" << version::str << std::endl;
 			}
 			else if( std::strcmp( "-c", argv[i] ) == 0 or std::strcmp( "-cout", argv[i] ) == 0 )
 			{
@@ -42,14 +44,14 @@ OPTIONS:
 			}
 			else
 			{
-				std::cerr << "Unrecognized argument \"" << argv[i] << "\" use -help\n";
+				std::cerr << "[WARNING] Unrecognized argument \"" << argv[i] << "\" use -help\n";
 			}
 			continue;
 		}
 		std::ifstream wavefrontFile( argv[i] );
 		if( not wavefrontFile.is_open() )
 		{
-			std::cerr << "ERROR: File " << argv[i] << " couldn't open\n";
+			std::cerr << "[ERROR] File " << argv[i] << " couldn't open\n";
 			continue;
 		}
 		//data loaded ready to go
@@ -62,8 +64,11 @@ OPTIONS:
 		std::cout << "//Using file " << argv[i] << std::endl;
 		if( not parse_file( wavefrontFile, _vert, _text, _norm, _face ) )
 		{
-			std::cerr << "ERROR: Couldn't parse file " << argv[i] << " aborting operation\n";
+			std::cerr << "[ERROR] Couldn't parse file " << argv[i] << " aborting operation\n";
 		}
+
+		std::vector<float> _raw = expand_faces( _vert, _text, _norm, _face );
+		std::cerr << "[INFO] expanded size | face count: " << _raw.size()/8 << " | " << _face.size()*3 << std::endl;
 		
 		std::ofstream outFile;
 		if( not useCout )
@@ -75,11 +80,11 @@ OPTIONS:
 			outname = outname.substr( slashfind );
 			outname = outname.substr( 0, outname.rfind( '.' ) );
 			outname.append( ".c" );
-			std::cerr << "Output file: " << outname << std::endl;
+			std::cerr << "[INFO] Output file: " << outname << std::endl;
 			outFile.open( outname.c_str() );
 			if( not outFile.is_open() )
 			{
-				std::cerr << "ERROR: Couldn't open output file " << outname << std::endl;
+				std::cerr << "[ERROR] Couldn't open output file " << outname << std::endl;
 				continue;
 			}
 		}
@@ -94,11 +99,16 @@ OPTIONS:
 		{
 			currentOut = &std::cout;
 		}
-		if( not write_file( *currentOut, prefix, _vert, _text, _norm, _face ) )
+		if( not write_file_raw( *currentOut, prefix, _raw ) )
 		{
-			std::cerr << "ERROR: Writing file failed\n";
+			std::cerr << "[ERROR] Writing raw failed\n";
 			continue;
 		}
+		/*if( not write_file( *currentOut, prefix, _vert, _text, _norm, _face ) )
+		{
+			std::cerr << "[ERROR] Writing file failed\n";
+			continue;
+		}*/
 	}
 	return EXIT_SUCCESS;
 }

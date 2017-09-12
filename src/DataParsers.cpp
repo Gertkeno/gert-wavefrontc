@@ -56,7 +56,7 @@ Face parse_face( const std::string& line )
 		marks[i] = line.find( '/', marks[i] ) + 1;
 		if( line[marks[i]] == '/' )
 		{
-			std::cerr << "ERROR: No texture coordinates found, setting 0\n";
+			std::cerr << "[ERROR] No texture coordinates found, setting 0\n";
 			out.t[i] = 0;
 		}
 		else
