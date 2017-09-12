@@ -74,7 +74,7 @@ OPTIONS:
 		}
 
 		std::vector<float> _raw = expand_faces( _vert, _text, _norm, _face );
-		std::cerr << "[INFO] expanded size | face count: " << _raw.size()/8 << " | " << _face.size()*3 << std::endl;
+		//std::cerr << "[INFO] expanded size | face count: " << _raw.size()/8 << " | " << _face.size()*3 << std::endl;
 
 		std::ofstream outFile;
 		if( not useCout )
